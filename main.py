@@ -38,3 +38,33 @@ def read_book(book_id: int, db: Session = Depends(get_db())):
 def read_book(skip: int = 0, limit: int = 10, db: Session = Depends(get_db())):
     books = crud.get_books(db=db, skip=skip, limit=limit)
     return books
+
+
+@app.put("/books/{book_id}")
+def update_book(
+    book_id: int,
+    title: str = None,
+    author: str = None,
+    price: float = None,
+    publication_date: str = None,
+    db: Session = Depends(get_db()),
+):
+    db_book = crud.update_book(
+        db=db,
+        book_id=book_id,
+        title=title,
+        author=author,
+        price=price,
+        publication_date=publication_date,
+    )
+    if db_book is None:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return db_book
+
+
+@app.delete("/books/{book_id}")
+def delete_book(book_id: int, db: Session = Depends(get_db)):
+    db_book = crud.delete_book(db=db, book_id=book_id)
+    if db_book is None:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return db_book
