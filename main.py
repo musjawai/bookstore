@@ -15,7 +15,7 @@ def create_book(
     author: str,
     price: float,
     publication_date: str,
-    db: Session = Depends(get_db()),
+    db: Session = Depends(get_db),
 ):
     return crud.create_book(
         db=db,
@@ -27,7 +27,7 @@ def create_book(
 
 
 @app.get("/books/{book_id}")
-def read_book(book_id: int, db: Session = Depends(get_db())):
+def read_book(book_id: int, db: Session = Depends(get_db)):
     db_book = crud.get_book(db=db, book_id=book_id)
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
@@ -35,7 +35,7 @@ def read_book(book_id: int, db: Session = Depends(get_db())):
 
 
 @app.get("/books/")
-def read_book(skip: int = 0, limit: int = 10, db: Session = Depends(get_db())):
+def read_book(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     books = crud.get_books(db=db, skip=skip, limit=limit)
     return books
 
@@ -47,7 +47,7 @@ def update_book(
     author: str = None,
     price: float = None,
     publication_date: str = None,
-    db: Session = Depends(get_db()),
+    db: Session = Depends(get_db),
 ):
     db_book = crud.update_book(
         db=db,
